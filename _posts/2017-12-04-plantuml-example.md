@@ -2,6 +2,7 @@
 layout: post
 title: Plantuml example
 categories: example
+published: false
 tags: [plantuml]
 ---
 
