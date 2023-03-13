@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang=" en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>postgresql db 이중화 1 | Elegantly Brilliantly</title>
+<meta name="generator" content="Jekyll v4.3.2">
+<meta property="og:title" content="postgresql db 이중화 1">
+<meta name="author" content="Eden">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="postgresql db 이중화 1">
+<meta property="og:description" content="postgresql db 이중화 1">
+<link rel="canonical" href="http://igothere.github.io/jekyll-theme-yat/postgresql/2022/03/28/fifth.html">
+<meta property="og:url" content="http://igothere.github.io/jekyll-theme-yat/postgresql/2022/03/28/fifth.html">
+<meta property="og:site_name" content="Elegantly Brilliantly">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-03-28T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="postgresql db 이중화 1">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Eden"},"dateModified":"2022-03-28T00:00:00+00:00","datePublished":"2022-03-28T00:00:00+00:00","description":"postgresql db 이중화 1","headline":"postgresql db 이중화 1","mainEntityOfPage":{"@type":"WebPage","@id":"http://igothere.github.io/jekyll-theme-yat/postgresql/2022/03/28/fifth.html"},"url":"http://igothere.github.io/jekyll-theme-yat/postgresql/2022/03/28/fifth.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="http://igothere.github.io/jekyll-theme-yat/feed.xml" title="Elegantly Brilliantly">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="Elegantly Brilliantly" src="" onerror="this.style.display='none'">
+  Elegantly Brilliantly
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+    <div class="wrapper">
+      <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">postgresql db 이중화 1</h1>
+  <h2 class="post-subtitle">postgresql db 이중화</h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-03-28T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Mar 28, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 3 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#postgresql">#postgresql</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#replication">#replication</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#stream">#stream</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h1 id="postgresql-db-이중화-1">postgresql db 이중화 1</h1>
+
+<h2 id="-먼저-궁극적인-목적은-postgresql-이중화--pgpool2-를-사용하여-자동-failover-환경을-구축하는-것이다-이-페이지에서는-자동-failover-구성에-앞서-postgresql-replication-방법에-대해-먼저-설명한다">* 먼저 궁극적인 목적은 postgresql 이중화 + pgpool2 를 사용하여 자동 failover 환경을 구축하는 것이다. 이 페이지에서는 자동 failover 구성에 앞서 postgresql replication 방법에 대해 먼저 설명한다.</h2>
+
+<h2 id="1-postgresql-버전-및-구축환경">1. postgresql 버전 및 구축환경</h2>
+<p>보통 검색해보면 centos 기준으로 설명이 많이 나와있다. 여기서는 우분투 서버 기준으로 설명한다.</p>
+<ul>
+  <li>OS - ubuntu 20.04 서버 3대 (primary - standby - standby)</li>
+  <li>Postgresql14 버전</li>
+  <li>$PGDATA  - /var/lib/postgresql/14/main</li>
+  <li>Archive mode - on</li>
+  <li>Replication Slot - 사용</li>
+</ul>
+
+<h2 id="2-postgresql-14-버전-설치">2. postgresql 14 버전 설치</h2>
+<ul>
+  <li>https://www.postgresql.org/download/linux/ubuntu/</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" &gt; /etc/apt/sources.list.d/pgdg.list'
+
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+sudo apt-get update
+
+sudo apt-get -y install postgresql
+
+</code></pre></div></div>
+
+<h2 id="3-replication-복제방식은-postgresql에서-제공하는-streaming">3. Replication 복제방식은 postgresql에서 제공하는 Streaming</h2>
+<p>설명은 인터넷에 굉장히 잘 되어 있기 떄문에 설정 방법에 대해서만 기술</p>
+<h3 id="31-archive-디렉토리-생성-primarystandby">3.1 archive 디렉토리 생성 (primary,standby)</h3>
+<ul>
+  <li>postgresql DB를 설치 했다면 자동으로 postgres 계정이 생성되어 있다.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>su - postgres //이렇게 하면 postgres계정은 패스워드 없이 생성되기 때문에 바로 변경 할 수 없다. 추후 pgpool 설정시에도 postgres 의 비밀번호가 필요 하기 때문에 미리 생성해두자
+
+[all servers]# sudo su
+
+[all servers]# passwd postgres 
+
+</code></pre></div></div>
+<ul>
+  <li>postgres 비밀번호 생성후</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[all servers]# su - postgres
+
+[all servers]# mkdir /var/lib/postgresql/archivedir
+
+</code></pre></div></div>
+<h3 id="32-postgresqlconf-설정-primary-파일-위치는-etcpostgresql14main">3.2 postgresql.conf 설정 (primary) 파일 위치는 /etc/postgresql/14/main</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>listen_addresses = '*'
+archive_mode = on
+archive_command = 'cp "%p" "/var/lib/postgresql/archivedir/%f"'
+max_wal_senders = 10
+max_replication_slots = 10
+wal_level = replica
+hot_standby = on
+wal_log_hints = on
+</code></pre></div></div>
+
+<h3 id="33-postgresql-계정생성-primary">3.3 postgresql 계정생성 (primary)</h3>
+<p>추후 pgpool을 사용하여 failover 할것이기 때문에 계정은 미리 생성해두자
+ postgresql 예전버전은 scram-sha-256 없고 md5 였는데 특정버전부터 추가 되었다.
+ 여기서는 최신 postgresql로 작업중이라 scram-sha-256 사용한다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[primary]# psql -U postgres -p 5432
+
+postgres=# SET password_encryption = 'scram-sha-256';
+
+postgres=# CREATE ROLE pgpool WITH LOGIN;
+
+postgres=# CREATE ROLE repl WITH REPLICATION LOGIN;
+
+postgres=# \password pgpool
+
+postgres=# \password repl
+
+postgres=# \password postgres
+
+GRANT pg_monitor TO pgpool;
+
+</code></pre></div></div>
+
+<p>repl - replication user <br>
+pgpool - pgpool user</p>
+<h3 id="34-pg_hbaconf-설정-primarystandby">3.4 pg_hba.conf 설정 (primary,standby)</h3>
+<p>일단 나의 설정은 이렇게 되어 있다. 각 내용의 자세한 설명은 검색해보면 잘 설명되어 있다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Database administrative login by Unix domain socket
+local   all             postgres                                scram-sha-256
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             0.0.0.0/0               scram-sha-256
+# IPv6 local connections:
+host    all             all             ::1/128                 scram-sha-256
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     peer
+host    replication     all             0.0.0.0/0               scram-sha-256
+
+</code></pre></div></div>
+
+<p>다 설정한후</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql restart
+
+</code></pre></div></div>
+<h3 id="35-primary-서버의-데이터-복제백업-standby">3.5 primary 서버의 데이터 복제/백업 (standby)</h3>
+<ul>
+  <li>먼저 혹시모를 상황에 대비해 기본 data 디렉토리 백업하고 시작하자.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql stop
+
+su - postgres
+
+cd /var/lib/postgresql/14
+
+mv main main.bak
+
+mkdir main
+
+chown postgres:postgres main
+
+chmod 0700 main
+
+//복제 하는 부분
+/usr/lib/postgresql/14/bin/pg_basebackup -h {primary server ip} -D /var/lib/postgresql/14/main -U repl -v -P -R -X stream -C -S server2
+
+//pg_basebackup 옵션 확인
+pg_basebackup --help
+</code></pre></div></div>
+
+<p>완료후 /var/lib/postgresql/14/main에 정상적으로 복사되어 있는지 확인</p>
+<ul>
+  <li>standby.signal은 빈파일로 자동 생성되어 있음</li>
+  <li>postgresql.auto.conf에 primary 서버 정보가 들어가 있다.</li>
+  <li>DB</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql start
+
+</code></pre></div></div>
+<h3 id="36-정상-확인-primarystandby">3.6 정상 확인 (primary,standby)</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psql -U postgres
+
+postgres=# select pg_is_in_recovery();
+
+//primary에서는 f standby에서는 t 라는 결과가 나오면 정상적으로 적용
+
+</code></pre></div></div>
+
+<p>테스트를 해보면 primary에서 테이블 생성하고 데이터를 넣고 standby에도 정상적으로 입력 되는지 확인해보자
+CREATE TABLE test (
+  name	VARCHAR(20),
+  age	INT
+);
+INSERT INTO test VALUES(‘김성공’, 23);</p>
+
+<h3 id="37-참고-사이트">3.7 참고 사이트</h3>
+<p>https://www.pgpool.net/docs/latest/en/html/example-cluster.html#EXAMPLE-CLUSTER-STRUCTURE <br>
+https://yjkim97.tistory.com/57</p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/ansible/2022/02/16/forth.html" title="Ansible AWX사용해서 PC원격관리 해보기">Ansible AWX사용해서 PC원격관리 해보기</a><a class="next" href="/jekyll-theme-yat/postgresql/2022/03/29/sixth.html" title="postgresql db 이중화 2">postgresql db 이중화 2</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/spring/2022/01/27/third.html" title="postgresql db 이중화 2">spring에서 Webclient 사용하여 RestApi 통신 하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/dev/2022/01/18/second.html" title="postgresql db 이중화 2">ubuntu에 php 개발환경 구축하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/sbom/2023/02/09/tenth.html" title="postgresql db 이중화 2">국내 SBOM 속성 규격</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/web/2022/06/22/eighth.html" title="postgresql db 이중화 2">Web Was에 대하여</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --></section>
+</div>
+
+    </div>
+  </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Unpublished Work <span class="copyleft">©</span> 2017-2023 Eden</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/jekyll-theme-yat/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2780237611433482" crossorigin="anonymous"></script>
+</body>
+
+</html>

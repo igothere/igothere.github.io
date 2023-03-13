@@ -1,0 +1,1 @@
+Sitemap: http://igothere.github.io/jekyll-theme-yat/sitemap.xml
